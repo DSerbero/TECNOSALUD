@@ -1,6 +1,7 @@
 package models;
 
 import models.estructuras.ListaEnlazada;
+import java.time.LocalDateTime;
 
 public class RegistroAtencion {
     private Paciente paciente;
@@ -10,8 +11,9 @@ public class RegistroAtencion {
     private double totalDescuentos;
     private String medioPago;
     private boolean pagado;
+    private LocalDateTime fechaHoraReserva; 
 
-    public RegistroAtencion(Paciente paciente, Habitacion habitacionAsignada) {
+    public RegistroAtencion(Paciente paciente, Habitacion habitacionAsignada, LocalDateTime fechaHoraReserva) {
         this.paciente = paciente;
         this.habitacionAsignada = habitacionAsignada;
         this.serviciosAdquiridos = new ListaEnlazada<>();
@@ -19,55 +21,23 @@ public class RegistroAtencion {
         this.totalDescuentos = 0;
         this.medioPago = "";
         this.pagado = false;
+        this.fechaHoraReserva = fechaHoraReserva;
     }
 
     public void agregarServicio(ServicioMedico servicio) {
         serviciosAdquiridos.agregar(servicio);
     }
 
-    public void procesarPago(int opcionMedioPago) {
-        String[] medios = {"Efectivo", "Tarjeta Débito", "Tarjeta Crédito", "EPS"};
-        this.medioPago = medios[opcionMedioPago];
-
-        double subtotal = 0;
-        double descuentoTotal = 0;
-
-        for (int i = 0; i < serviciosAdquiridos.getTamano(); i++) {
-            ServicioMedico s = serviciosAdquiridos.obtener(i);
-            double precio = s.getPrecioUnitario();
-            double desc = 0;
-
-            if (paciente.isTieneEps() && opcionMedioPago == 3) {
-                desc = precio;
-            } else {
-                if (paciente.getEdad() < 5) {
-                    if (!s.isEsCirugiaEmergencia()) {
-                        desc = precio * 0.20;
-                    }
-                } else if (paciente.getEdad() >= 65) {
-                    if (s.isEsConsulta() || s.isEsHospitalizacion()) {
-                        desc = precio * 0.30;
-                    }
-                }
-            }
-            subtotal += (precio - desc);
-            descuentoTotal += desc;
-        }
-
-        if (opcionMedioPago == 1 || opcionMedioPago == 2) {
-            subtotal += subtotal * 0.02;
-        }
-
-        this.totalPagado = subtotal;
-        this.totalDescuentos = descuentoTotal;
-        this.pagado = true;
-    }
-
     public Paciente getPaciente() { return paciente; }
     public Habitacion getHabitacionAsignada() { return habitacionAsignada; }
     public ListaEnlazada<ServicioMedico> getServiciosAdquiridos() { return serviciosAdquiridos; }
     public double getTotalPagado() { return totalPagado; }
+    public void setTotalPagado(double totalPagado) { this.totalPagado = totalPagado; }
     public double getTotalDescuentos() { return totalDescuentos; }
+    public void setTotalDescuentos(double totalDescuentos) { this.totalDescuentos = totalDescuentos; }
     public String getMedioPago() { return medioPago; }
+    public void setMedioPago(String medioPago) { this.medioPago = medioPago; }
     public boolean isPagado() { return pagado; }
+    public void setPagado(boolean pagado) { this.pagado = pagado; }
+    public LocalDateTime getFechaHoraReserva() { return fechaHoraReserva; }
 }

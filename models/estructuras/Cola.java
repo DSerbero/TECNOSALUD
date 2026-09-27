@@ -20,7 +20,7 @@ public Cola(int capacidadMaxima) {
 
 public boolean encolar(T dato) {
         if (capacidadMaxima != -1 && tamano >= capacidadMaxima) {
-            return false; // Cola llena (ej. Pre-operatorio)
+            return false;
         }
         Nodo<T> nuevo = new Nodo<>(dato);
         if (fin != null) {
