@@ -1,14 +1,47 @@
 package models;
 
+import models.estructuras.Cola;
+import models.estructuras.ListaEnlazada;
+import models.estructuras.Pila;
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
 
 public class ClinicaGestor {
+    
+    private ListaEnlazada<RegistroAtencion> historialAtenciones;
+    private Cola<Paciente> colaConsultaExterna;
+    private Cola<Paciente> colaPreOperatorio;
+    private Pila<ServicioMedico> pilaServiciosPrestados;
+    private int[] pagosPorMedio; 
 
-    // Extrae la lógica que tenías en RegistroAtencion
-    public static void procesarPago(RegistroAtencion atencion, int opcionMedioPago) {
+    public ClinicaGestor() {
+        this.historialAtenciones = new ListaEnlazada<>();
+        this.colaConsultaExterna = new Cola<>(); 
+        this.colaPreOperatorio = new Cola<>(3); 
+        this.pilaServiciosPrestados = new Pila<>();
+        this.pagosPorMedio = new int[4]; 
+    }
+
+    
+    public void registrarAtencion(RegistroAtencion atencion) {
+        historialAtenciones.agregar(atencion);
+    }
+
+    public boolean encolarPreOperatorio(Paciente paciente) {
+        return colaPreOperatorio.encolar(paciente);
+    }
+
+    public void registrarServicioPrestado(ServicioMedico servicio) {
+        pilaServiciosPrestados.push(servicio);
+    }
+
+    public void procesarPago(RegistroAtencion atencion, int opcionMedioPago) {
         String[] medios = {"Efectivo", "Tarjeta Débito", "Tarjeta Crédito", "EPS"};
         atencion.setMedioPago(medios[opcionMedioPago]);
+
+        if (opcionMedioPago >= 0 && opcionMedioPago < 4) {
+            pagosPorMedio[opcionMedioPago]++;
+        }
 
         double subtotal = 0;
         double descuentoTotal = 0;
@@ -20,15 +53,15 @@ public class ClinicaGestor {
             double desc = 0;
 
             if (paciente.isTieneEps() && opcionMedioPago == 3) {
-                desc = precio; // EPS cubre todo
+                desc = precio; 
             } else {
                 if (paciente.getEdad() < 5) {
                     if (!s.isEsCirugiaEmergencia()) {
-                        desc = precio * 0.20; // 20% dscto
+                        desc = precio * 0.20; 
                     }
                 } else if (paciente.getEdad() >= 65) {
                     if (s.isEsConsulta() || s.isEsHospitalizacion()) {
-                        desc = precio * 0.30; // 30% dscto
+                        desc = precio * 0.30; 
                     }
                 }
             }
@@ -36,7 +69,6 @@ public class ClinicaGestor {
             descuentoTotal += desc;
         }
 
-        // Recargo 2% tarjetas
         if (opcionMedioPago == 1 || opcionMedioPago == 2) {
             subtotal += subtotal * 0.02;
         }
@@ -46,8 +78,8 @@ public class ClinicaGestor {
         atencion.setPagado(true);
     }
 
-    // Nueva regla para reembolsos basada en el tiempo
-    public static double procesarCancelacionReembolso(RegistroAtencion atencion, LocalDateTime fechaCancelacion) {
+
+    public double procesarCancelacionReembolso(RegistroAtencion atencion, LocalDateTime fechaCancelacion) {
         if (!atencion.isPagado()) {
             return 0.0;
         }
@@ -55,11 +87,16 @@ public class ClinicaGestor {
         long horasDiferencia = ChronoUnit.HOURS.between(fechaCancelacion, atencion.getFechaHoraReserva());
         double reembolso = atencion.getTotalPagado();
 
-        // Regla: Cancelación con menos de 24 horas => 50% de retención
         if (horasDiferencia < 24 && horasDiferencia > 0) {
             reembolso = reembolso * 0.50;
         }
         
         return reembolso;
     }
+
+    public ListaEnlazada<RegistroAtencion> getHistorialAtenciones() { return historialAtenciones; }
+    public Cola<Paciente> getColaConsultaExterna() { return colaConsultaExterna; }
+    public Cola<Paciente> getColaPreOperatorio() { return colaPreOperatorio; }
+    public Pila<ServicioMedico> getPilaServiciosPrestados() { return pilaServiciosPrestados; }
+    public int[] getPagosPorMedio() { return pagosPorMedio; }
 }
