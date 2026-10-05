@@ -12,6 +12,12 @@ public class VistaPrincipal extends JFrame {
     private final CardLayout cardLayout;
     private final JPanel panelCards;
     private final JLabel lblEstado;
+    private JTextArea areaInicio;
+    private JTextArea areaReporte;
+    private JLabel lblPacientesResumen;
+    private JLabel lblConsultasResumen;
+    private JLabel lblEsperaResumen;
+    private JLabel lblServiciosResumen;
 
     public VistaPrincipal() {
         this.controller = new ClinicaController();
@@ -22,6 +28,7 @@ public class VistaPrincipal extends JFrame {
         configurarVentana();
         add(crearLayoutPrincipal());
         actualizarPanelInicio();
+        actualizarPanelReportes();
     }
 
     private void configurarVentana() {
@@ -98,7 +105,7 @@ public class VistaPrincipal extends JFrame {
         boton.setMaximumSize(new Dimension(220, 42));
         boton.setPreferredSize(new Dimension(220, 42));
         boton.setBackground(color);
-        boton.setForeground(Color.WHITE);
+        boton.setForeground(Color.BLACK);
         boton.setFocusPainted(false);
         boton.setFont(new Font("Segoe UI", Font.BOLD, 14));
         boton.setBorder(BorderFactory.createEmptyBorder(10, 12, 10, 12));
@@ -133,25 +140,30 @@ public class VistaPrincipal extends JFrame {
         JPanel cardsResumen = new JPanel(new GridLayout(1, 4, 20, 20));
         cardsResumen.setBackground(new Color(240, 245, 250));
 
-        cardsResumen.add(crearResumenCard("Pacientes", "0", new Color(29, 128, 159)));
-        cardsResumen.add(crearResumenCard("Consultas", "0", new Color(36, 154, 111)));
-        cardsResumen.add(crearResumenCard("En espera", "0", new Color(204, 153, 0)));
-        cardsResumen.add(crearResumenCard("Servicios", "0", new Color(118, 96, 168)));
+        lblPacientesResumen = crearResumenCardLabel("Pacientes", String.valueOf(controller.getGestor().getPacientesRegistrados().getTamano()), new Color(29, 128, 159));
+        lblConsultasResumen = crearResumenCardLabel("Consultas", String.valueOf(controller.getGestor().getHistorialAtenciones().getTamano()), new Color(36, 154, 111));
+        lblEsperaResumen = crearResumenCardLabel("En espera", String.valueOf(controller.getGestor().getColaConsultaExterna().getTamano()), new Color(204, 153, 0));
+        lblServiciosResumen = crearResumenCardLabel("Servicios", String.valueOf(controller.getGestor().getPilaServiciosPrestados().getTamanio()), new Color(118, 96, 168));
 
-        JTextArea area = new JTextArea();
-        area.setEditable(false);
-        area.setFont(new Font("Segoe UI", Font.PLAIN, 14));
-        area.setBackground(new Color(255, 255, 255));
-        area.setBorder(BorderFactory.createTitledBorder("Resumen del sistema"));
-        area.setText(controller.obtenerReporte());
+        cardsResumen.add(crearResumenCard("Pacientes", lblPacientesResumen, new Color(29, 128, 159)));
+        cardsResumen.add(crearResumenCard("Consultas", lblConsultasResumen, new Color(36, 154, 111)));
+        cardsResumen.add(crearResumenCard("En espera", lblEsperaResumen, new Color(204, 153, 0)));
+        cardsResumen.add(crearResumenCard("Servicios", lblServiciosResumen, new Color(118, 96, 168)));
+
+        areaInicio = new JTextArea();
+        areaInicio.setEditable(false);
+        areaInicio.setFont(new Font("Segoe UI", Font.PLAIN, 14));
+        areaInicio.setBackground(new Color(255, 255, 255));
+        areaInicio.setBorder(BorderFactory.createTitledBorder("Resumen del sistema"));
+        areaInicio.setText(controller.obtenerReporte());
 
         panel.add(titulo, BorderLayout.NORTH);
         panel.add(cardsResumen, BorderLayout.CENTER);
-        panel.add(new JScrollPane(area), BorderLayout.SOUTH);
+        panel.add(new JScrollPane(areaInicio), BorderLayout.SOUTH);
         return panel;
     }
 
-    private JPanel crearResumenCard(String titulo, String valor, Color color) {
+    private JPanel crearResumenCard(String titulo, JLabel valorLabel, Color color) {
         JPanel panel = new JPanel(new BorderLayout(10, 10));
         panel.setBackground(new Color(255, 255, 255));
         panel.setBorder(BorderFactory.createCompoundBorder(
@@ -163,13 +175,19 @@ public class VistaPrincipal extends JFrame {
         lblTitulo.setFont(new Font("Segoe UI", Font.PLAIN, 14));
         lblTitulo.setForeground(new Color(90, 100, 110));
 
-        JLabel lblValor = new JLabel(valor);
-        lblValor.setFont(new Font("Segoe UI", Font.BOLD, 28));
-        lblValor.setForeground(color);
+        valorLabel.setFont(new Font("Segoe UI", Font.BOLD, 28));
+        valorLabel.setForeground(color);
 
         panel.add(lblTitulo, BorderLayout.NORTH);
-        panel.add(lblValor, BorderLayout.CENTER);
+        panel.add(valorLabel, BorderLayout.CENTER);
         return panel;
+    }
+
+    private JLabel crearResumenCardLabel(String titulo, String valor, Color color) {
+        JLabel label = new JLabel(valor);
+        label.setFont(new Font("Segoe UI", Font.BOLD, 28));
+        label.setForeground(color);
+        return label;
     }
 
     private JPanel crearPanelPaciente() {
@@ -209,7 +227,7 @@ public class VistaPrincipal extends JFrame {
 
         JButton btnGuardar = new JButton("Guardar paciente");
         btnGuardar.setBackground(new Color(29, 128, 159));
-        btnGuardar.setForeground(Color.WHITE);
+        btnGuardar.setForeground(Color.BLACK);
         btnGuardar.setFont(new Font("Segoe UI", Font.BOLD, 14));
         btnGuardar.addActionListener(e -> {
             String documento = txtDocumento.getText();
@@ -282,7 +300,7 @@ public class VistaPrincipal extends JFrame {
 
         JButton btnAgregar = new JButton("Agregar a cola");
         btnAgregar.setBackground(new Color(29, 128, 159));
-        btnAgregar.setForeground(Color.WHITE);
+        btnAgregar.setForeground(Color.BLACK);
         btnAgregar.setFont(new Font("Segoe UI", Font.BOLD, 14));
         btnAgregar.addActionListener(e -> {
             String documento = txtDocumento.getText();
@@ -334,7 +352,7 @@ public class VistaPrincipal extends JFrame {
 
         JButton btnAsignar = new JButton("Asignar habitación");
         btnAsignar.setBackground(new Color(38, 166, 118));
-        btnAsignar.setForeground(Color.WHITE);
+        btnAsignar.setForeground(Color.BLACK);
         btnAsignar.setFont(new Font("Segoe UI", Font.BOLD, 14));
         btnAsignar.addActionListener(e -> {
             String documento = txtDocumento.getText();
@@ -378,22 +396,22 @@ public class VistaPrincipal extends JFrame {
         form.setBackground(new Color(240, 245, 250));
 
         JTextField txtDocumento = new JTextField();
-        JTextField txtCodigoServicio = new JTextField();
+        JComboBox<String> comboServicios = new JComboBox<>(obtenerServiciosDisponibles());
 
         form.add(new JLabel("Documento del paciente:"));
         form.add(txtDocumento);
-        form.add(new JLabel("Código del servicio:"));
-        form.add(txtCodigoServicio);
+        form.add(new JLabel("Servicio:"));
+        form.add(comboServicios);
 
         JButton btnRegistrar = new JButton("Registrar servicio");
         btnRegistrar.setBackground(new Color(52, 166, 122));
-        btnRegistrar.setForeground(Color.WHITE);
+        btnRegistrar.setForeground(Color.BLACK);
         btnRegistrar.setFont(new Font("Segoe UI", Font.BOLD, 14));
         btnRegistrar.addActionListener(e -> {
             String documento = txtDocumento.getText();
-            String codigo = txtCodigoServicio.getText();
+            String codigo = obtenerCodigoServicioSeleccionado((String) comboServicios.getSelectedItem());
             if (documento == null || documento.trim().isEmpty() || codigo == null || codigo.trim().isEmpty()) {
-                mostrarEstado("Ingrese documento y código del servicio.", new Color(178, 58, 58));
+                mostrarEstado("Ingrese documento y seleccione un servicio.", new Color(178, 58, 58));
                 return;
             }
 
@@ -405,7 +423,7 @@ public class VistaPrincipal extends JFrame {
             if (controller.agregarServicioAAtencion(documento, codigo)) {
                 mostrarEstado("Servicio registrado correctamente.", new Color(28, 142, 86));
                 txtDocumento.setText("");
-                txtCodigoServicio.setText("");
+                comboServicios.setSelectedIndex(0);
             } else {
                 mostrarEstado("El servicio no existe o no se pudo registrar.", new Color(178, 58, 58));
             }
@@ -439,7 +457,7 @@ public class VistaPrincipal extends JFrame {
 
         JButton btnPagar = new JButton("Registrar pago");
         btnPagar.setBackground(new Color(196, 133, 0));
-        btnPagar.setForeground(Color.WHITE);
+        btnPagar.setForeground(Color.BLACK);
         btnPagar.setFont(new Font("Segoe UI", Font.BOLD, 14));
         btnPagar.addActionListener(e -> {
             String documento = txtDocumento.getText();
@@ -475,7 +493,7 @@ public class VistaPrincipal extends JFrame {
         titulo.setFont(new Font("Segoe UI", Font.BOLD, 26));
         titulo.setForeground(new Color(14, 53, 71));
 
-        JTextArea areaReporte = new JTextArea();
+        areaReporte = new JTextArea();
         areaReporte.setEditable(false);
         areaReporte.setFont(new Font("Segoe UI", Font.PLAIN, 14));
         areaReporte.setBackground(Color.WHITE);
@@ -488,16 +506,54 @@ public class VistaPrincipal extends JFrame {
     }
 
     private void actualizarPanelInicio() {
+        if (lblPacientesResumen != null) {
+            lblPacientesResumen.setText(String.valueOf(controller.getGestor().getPacientesRegistrados().getTamano()));
+        }
+        if (lblConsultasResumen != null) {
+            lblConsultasResumen.setText(String.valueOf(controller.getGestor().getHistorialAtenciones().getTamano()));
+        }
+        if (lblEsperaResumen != null) {
+            lblEsperaResumen.setText(String.valueOf(controller.getGestor().getColaConsultaExterna().getTamano()));
+        }
+        if (lblServiciosResumen != null) {
+            lblServiciosResumen.setText(String.valueOf(controller.getGestor().getPilaServiciosPrestados().getTamanio()));
+        }
+        if (areaInicio != null) {
+            areaInicio.setText(controller.obtenerReporte());
+        }
         mostrarEstado("Sistema listo para gestionar la clínica.", new Color(19, 88, 120));
     }
 
     private void actualizarPanelReportes() {
+        if (areaReporte != null) {
+            areaReporte.setText(controller.obtenerReporte());
+        }
         mostrarEstado("Reporte actualizado.", new Color(19, 88, 120));
     }
 
     private void mostrarEstado(String mensaje, Color color) {
         lblEstado.setText(mensaje);
         lblEstado.setForeground(color);
+    }
+
+    private String[] obtenerServiciosDisponibles() {
+        String[] servicios = new String[controller.getGestor().getServiciosDisponibles().getTamano()];
+        for (int i = 0; i < controller.getGestor().getServiciosDisponibles().getTamano(); i++) {
+            var servicio = controller.getGestor().getServiciosDisponibles().obtener(i);
+            servicios[i] = servicio.getCodigo() + " - " + servicio.getNombre();
+        }
+        return servicios;
+    }
+
+    private String obtenerCodigoServicioSeleccionado(String textoServicio) {
+        if (textoServicio == null || textoServicio.trim().isEmpty()) {
+            return "";
+        }
+        int indiceSeparador = textoServicio.indexOf(" - ");
+        if (indiceSeparador > 0) {
+            return textoServicio.substring(0, indiceSeparador).trim();
+        }
+        return textoServicio.trim();
     }
 
     private Habitacion.TipoHabitacion convertirTipoHabitacion(int seleccion) {
