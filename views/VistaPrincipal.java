@@ -205,10 +205,10 @@ public class VistaPrincipal extends JFrame {
         JTextField txtDocumento = new JTextField();
         JTextField txtNombre = new JTextField();
         JTextField txtEdad = new JTextField();
-        JTextField txtGenero = new JTextField();
+        JComboBox<String> comboGenero = new JComboBox<>(new String[]{"Femenino", "Masculino", "No binario", "Prefiero no decirlo"});
         JTextField txtTelefono = new JTextField();
         JCheckBox chkEps = new JCheckBox("Tiene EPS");
-        JTextField txtTipoSangre = new JTextField();
+        JComboBox<String> comboTipoSangre = new JComboBox<>(new String[]{"A+", "A-", "B+", "B-", "AB+", "AB-", "O+", "O-"});
 
         form.add(new JLabel("Documento:"));
         form.add(txtDocumento);
@@ -217,13 +217,13 @@ public class VistaPrincipal extends JFrame {
         form.add(new JLabel("Edad:"));
         form.add(txtEdad);
         form.add(new JLabel("Género:"));
-        form.add(txtGenero);
+        form.add(comboGenero);
         form.add(new JLabel("Teléfono:"));
         form.add(txtTelefono);
         form.add(new JLabel("EPS:"));
         form.add(chkEps);
         form.add(new JLabel("Tipo de sangre:"));
-        form.add(txtTipoSangre);
+        form.add(comboTipoSangre);
 
         JButton btnGuardar = new JButton("Guardar paciente");
         btnGuardar.setBackground(new Color(29, 128, 159));
@@ -233,9 +233,9 @@ public class VistaPrincipal extends JFrame {
             String documento = txtDocumento.getText();
             String nombre = txtNombre.getText();
             String edad = txtEdad.getText();
-            String genero = txtGenero.getText();
+            String genero = (String) comboGenero.getSelectedItem();
             String telefono = txtTelefono.getText();
-            String tipoSangre = txtTipoSangre.getText();
+            String tipoSangre = (String) comboTipoSangre.getSelectedItem();
 
             if (documento == null || documento.trim().isEmpty() || nombre == null || nombre.trim().isEmpty() ||
                     genero == null || genero.trim().isEmpty() || telefono == null || telefono.trim().isEmpty() ||
@@ -253,9 +253,9 @@ public class VistaPrincipal extends JFrame {
                     txtDocumento.setText("");
                     txtNombre.setText("");
                     txtEdad.setText("");
-                    txtGenero.setText("");
+                    comboGenero.setSelectedIndex(0);
                     txtTelefono.setText("");
-                    txtTipoSangre.setText("");
+                    comboTipoSangre.setSelectedIndex(0);
                     chkEps.setSelected(false);
                 } else {
                     mostrarEstado("El paciente ya existe o los datos son inválidos.", new Color(178, 58, 58));
