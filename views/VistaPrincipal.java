@@ -31,9 +31,30 @@ public class VistaPrincipal extends JFrame {
 
         configurarVentana();
         add(crearLayoutPrincipal());
+        cargarDatosPruebaSiExisten();
         actualizarPanelInicio();
         actualizarPanelReportes();
         actualizarPanelHabitaciones();
+    }
+
+    /**
+     * TEMPORAL - carga opcional del JSON de pruebas por reflexion.
+     * Si se borra util/CargadorDatosPruebaTmp.java, este metodo no carga nada
+     * y el programa sigue funcionando igual.
+     */
+    private void cargarDatosPruebaSiExisten() {
+        try {
+            Class<?> claseCargador = Class.forName("util.CargadorDatosPruebaTmp");
+            java.lang.reflect.Method metodo = claseCargador.getMethod("cargar", models.ClinicaGestor.class);
+            Object cargados = metodo.invoke(null, controller.getGestor());
+            if (cargados instanceof Integer && ((Integer) cargados) > 0) {
+                mostrarEstado(((Integer) cargados) + " paciente(s) de prueba cargados desde JSON.", new Color(28, 142, 86));
+            }
+        } catch (ClassNotFoundException ex) {
+            // Cargador temporal eliminado: no hace nada.
+        } catch (Exception ex) {
+            System.err.println("[PRUEBA] No se pudo invocar el cargador temporal: " + ex.getMessage());
+        }
     }
 
     private void configurarVentana() {

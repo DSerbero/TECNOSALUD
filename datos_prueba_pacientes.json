@@ -1,0 +1,59 @@
+{
+  "_nota": "ARCHIVO TEMPORAL SOLO PARA PRUEBAS. Se puede borrar sin afectar el codigo.",
+  "pacientes": [
+    {
+      "documento": "101",
+      "nombre": "Ana Lopez",
+      "edad": 4,
+      "genero": "Femenino",
+      "telefono": "3001112233",
+      "tieneEps": false,
+      "tipoSangre": "O+"
+    },
+    {
+      "documento": "102",
+      "nombre": "Luis Perez",
+      "edad": 70,
+      "genero": "Masculino",
+      "telefono": "3002223344",
+      "tieneEps": false,
+      "tipoSangre": "A+"
+    },
+    {
+      "documento": "103",
+      "nombre": "Marta Gomez",
+      "edad": 30,
+      "genero": "Femenino",
+      "telefono": "3003334455",
+      "tieneEps": true,
+      "tipoSangre": "B+"
+    },
+    {
+      "documento": "104",
+      "nombre": "Carlos Ruiz",
+      "edad": 45,
+      "genero": "Masculino",
+      "telefono": "3004445566",
+      "tieneEps": false,
+      "tipoSangre": "AB+"
+    },
+    {
+      "documento": "105",
+      "nombre": "Sofia Diaz",
+      "edad": 8,
+      "genero": "Femenino",
+      "telefono": "3005556677",
+      "tieneEps": true,
+      "tipoSangre": "O-"
+    },
+    {
+      "documento": "106",
+      "nombre": "Jorge Torres",
+      "edad": 68,
+      "genero": "Masculino",
+      "telefono": "3006667788",
+      "tieneEps": false,
+      "tipoSangre": "A-"
+    }
+  ]
+}

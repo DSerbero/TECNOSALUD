@@ -72,6 +72,9 @@ public class ClinicaController {
         if (paciente == null) {
             return null;
         }
+        if (gestor.buscarAtencionActivaPorPaciente(documento) != null) {
+            return null;
+        }
         Habitacion habitacion = gestor.buscarHabitacionDisponible(tipoHabitacion);
         if (habitacion == null) {
             return null;

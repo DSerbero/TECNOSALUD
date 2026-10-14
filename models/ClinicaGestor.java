@@ -93,6 +93,9 @@ public class ClinicaGestor {
             return false;
         }
         if (esPreOperatorio) {
+            if (colaPreOperatorio.contiene(paciente)) {
+                return false;
+            }
             if (colaPreOperatorio.estaLlena()) {
                 return false;
             }
