@@ -43,25 +43,37 @@ public class ListaEnlazada<T> {
     }
 
     public boolean eliminar(T dato) {
-        if (cabeza == null) return false;
-
+        if (cabeza == null) {
+            return false;
+        }
         if (cabeza.getDato().equals(dato)) {
             cabeza = cabeza.getSiguiente();
             tamano--;
             return true;
         }
-
         Nodo<T> actual = cabeza;
         while (actual.getSiguiente() != null && !actual.getSiguiente().getDato().equals(dato)) {
             actual = actual.getSiguiente();
         }
-
         if (actual.getSiguiente() != null) {
             actual.setSiguiente(actual.getSiguiente().getSiguiente());
             tamano--;
             return true;
         }
+        return false;
+    }
 
+    public boolean contiene(T dato) {
+        if (dato == null) {
+            return false;
+        }
+        Nodo<T> actual = cabeza;
+        while (actual != null) {
+            if (actual.getDato().equals(dato)) {
+                return true;
+            }
+            actual = actual.getSiguiente();
+        }
         return false;
     }
 }

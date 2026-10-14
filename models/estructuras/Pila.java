@@ -24,6 +24,18 @@ public class Pila<T> {
         return dato;
     }
 
-    public boolean estaVacia() { return cima == null; }
-    public int getTamanio() { return tamano; }
+    public T peek() {
+        if (estaVacia()) {
+            return null;
+        }
+        return cima.getDato();
+    }
+
+    public boolean estaVacia() {
+        return cima == null;
+    }
+
+    public int getTamanio() {
+        return tamano;
+    }
 }
