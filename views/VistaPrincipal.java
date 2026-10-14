@@ -165,7 +165,7 @@ public class VistaPrincipal extends JFrame {
         areaInicio.setFont(new Font("Segoe UI", Font.PLAIN, 14));
         areaInicio.setBackground(new Color(255, 255, 255));
         areaInicio.setBorder(BorderFactory.createTitledBorder("Resumen del sistema"));
-        areaInicio.setText(controller.obtenerReporte());
+        areaInicio.setText(controller.obtenerReporteResumido());
 
         panel.add(titulo, BorderLayout.NORTH);
         panel.add(cardsResumen, BorderLayout.CENTER);
@@ -726,7 +726,7 @@ public class VistaPrincipal extends JFrame {
             lblServiciosResumen.setText(String.valueOf(controller.getGestor().getPilaServiciosPrestados().getTamanio()));
         }
         if (areaInicio != null) {
-            areaInicio.setText(controller.obtenerReporte());
+            areaInicio.setText(controller.obtenerReporteResumido());
         }
         mostrarEstado("Sistema listo para gestionar la clínica.", new Color(19, 88, 120));
     }

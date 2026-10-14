@@ -662,4 +662,17 @@ public class ClinicaGestor {
     private String porcentaje(double valor) {
         return String.format("%.1f%%", valor);
     }
+
+    public String obtenerReporteResumido() {
+        StringBuilder resumen = new StringBuilder();
+        resumen.append("Pacientes registrados: ").append(pacientesRegistrados.getTamano()).append("\n");
+        resumen.append("Atenciones registradas: ").append(historialAtenciones.getTamano()).append("\n");
+        resumen.append("En cola consulta externa: ").append(colaConsultaExterna.getTamano()).append("\n");
+        resumen.append("En cola pre-operatorio: ").append(colaPreOperatorio.getTamano()).append(" (maximo 3)\n");
+        resumen.append("Servicios pendientes (pila): ").append(pilaServiciosPrestados.getTamanio()).append("\n");
+        resumen.append("Total recaudado: ").append(dinero(totalRecaudado)).append("\n");
+        resumen.append("Descuentos: ").append(dinero(totalDescuentos)).append("\n");
+        resumen.append("Reembolsado: ").append(dinero(totalReembolsado)).append("\n");
+        return resumen.toString();
+    }
 }

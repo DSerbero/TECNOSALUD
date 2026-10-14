@@ -141,4 +141,8 @@ public class ClinicaController {
     public String obtenerReporte() {
         return gestor.obtenerReporte();
     }
+
+    public String obtenerReporteResumido() {
+        return gestor.obtenerReporteResumido();
+    }
 }
